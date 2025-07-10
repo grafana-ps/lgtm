@@ -1,12 +1,15 @@
 import _ from 'lodash'
 import express from 'express'
 import {
+  getMiddlewareMetrics,
   setupTracing,
 } from './util.js'
 
 const app = express()
 
 setupTracing('load-generator')
+
+app.use(getMiddlewareMetrics('load-generator'))
 
 app.get('/', (req, res) => {
   res.send({

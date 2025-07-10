@@ -17,6 +17,7 @@ import {
 import {
   getNodeAutoInstrumentations,
 } from '@opentelemetry/auto-instrumentations-node'
+import promBundle from 'express-prom-bundle'
 
 export async function setupTracing(serviceName) {
   const traceExporter = new OTLPTraceExporter({
@@ -41,4 +42,14 @@ export async function setupTracing(serviceName) {
   span.end()
 
   return provider
+}
+
+export function getMiddlewareMetrics(service) {
+  return promBundle({
+    customLabels: {
+      service,
+    },
+    includeMethod: true,
+    includePath: true,
+  })
 }
