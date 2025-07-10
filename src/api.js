@@ -1,8 +1,14 @@
 import _ from 'lodash'
 import express from 'express'
 import promBundle from 'express-prom-bundle'
+import {
+  setupTracing,
+} from './util.js'
 
 const app = express()
+
+setupTracing('api')
+
 const metricsMiddleware = promBundle({
   customLabels: {
     service: 'api',
