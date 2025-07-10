@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch-api": "nodemon src/api.js"
+    "watch-api": "nodemon src/api.js",
+    "watch-load-generator": "nodemon src/load-generator.js"
   },
   "keywords": [],
   "author": "",
