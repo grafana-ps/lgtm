@@ -5,11 +5,17 @@ import ts from 'taylor-swift'
 import {
   getMiddlewareMetrics,
   setupTracing,
-} from '../util.js'
+} from '../lib/util.js'
 
 const PL = _({
   service: 'api',
 })
+
+const LGTM_AUTH = _.get(process, 'env.LGTM_AUTH')
+
+if (!LGTM_AUTH) {
+  throw new Error('LGTM_AUTH is not set')
+}
 
 const app = express()
 
@@ -21,7 +27,7 @@ app.use(basicAuth({
   authorizer: async (username, password, cb) => {
     try {
       const response = await fetch(
-        'http://localhost:3001/authenticate',
+        `http://${LGTM_AUTH}/authenticate`,
         {
           method: 'POST',
           headers: {

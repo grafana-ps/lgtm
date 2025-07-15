@@ -5,7 +5,13 @@ import ts from 'taylor-swift'
 import {
   getMiddlewareMetrics,
   setupTracing,
-} from '../util.js'
+} from '../lib/util.js'
+
+const LGTM_API = _.get(process, 'env.LGTM_API')
+
+if (!LGTM_API) {
+  throw new Error('LGTM_API is not set')
+}
 
 const ALBUMS = ts.album.all().map((a) => a.title)
 const USERNAMES = ['meredith', 'olivia', 'benjamin']

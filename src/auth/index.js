@@ -4,7 +4,7 @@ import ts from 'taylor-swift'
 import {
   getMiddlewareMetrics,
   setupTracing,
-} from '../util.js'
+} from '../lib/util.js'
 
 const PL = _({
   service: 'auth',
