@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch-api": "nodemon src/api.js",
-    "watch-auth": "nodemon src/auth.js",
-    "watch-load-generator": "nodemon src/load-generator.js"
+    "watch-api": "nodemon src/api/index.js",
+    "watch-auth": "nodemon src/auth/index.js",
+    "watch-load-generator": "nodemon src/load-generator/index.js"
   },
   "keywords": [],
   "author": "",

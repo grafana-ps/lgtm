@@ -4,7 +4,7 @@ import ts from 'taylor-swift'
 import {
   getMiddlewareMetrics,
   setupTracing,
-} from './util.js'
+} from '../util.js'
 
 const PL = _({
   service: 'auth',
@@ -34,4 +34,4 @@ app.post('/authenticate', (req, res) => {
   _.delay(() => res.status(status).send(PL.value()), _.random(100, 500))
 })
 
-app.listen(_.get(process, 'env.API_PORT', 3001))
+app.listen(_.get(process, 'env.API_PORT', 3000))

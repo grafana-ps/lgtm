@@ -5,7 +5,7 @@ import ts from 'taylor-swift'
 import {
   getMiddlewareMetrics,
   setupTracing,
-} from './util.js'
+} from '../util.js'
 
 const ALBUMS = ts.album.all().map((a) => a.title)
 const USERNAMES = ['meredith', 'olivia', 'benjamin']
@@ -58,4 +58,4 @@ setInterval(() => {
   _.delay(requestApi, _.random(0, 1000))
 }, 250)
 
-app.listen(_.get(process, 'env.LOAD_GENERATOR_PORT', 8080))
+app.listen(_.get(process, 'env.LOAD_GENERATOR_PORT', 3000))

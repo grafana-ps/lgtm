@@ -5,7 +5,7 @@ import ts from 'taylor-swift'
 import {
   getMiddlewareMetrics,
   setupTracing,
-} from './util.js'
+} from '../util.js'
 
 const PL = _({
   service: 'api',
