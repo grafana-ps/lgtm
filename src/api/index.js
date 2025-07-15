@@ -11,10 +11,10 @@ const PL = _({
   service: 'api',
 })
 
-const LGTM_AUTH = _.get(process, 'env.LGTM_AUTH')
+const LGTM_AUTH = _.get(process, 'env.LGTM_AUTHENTICATOR')
 
 if (!LGTM_AUTH) {
-  throw new Error('LGTM_AUTH is not set')
+  throw new Error('LGTM_AUTHENTICATOR is not set')
 }
 
 const app = express()

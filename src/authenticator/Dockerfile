@@ -5,7 +5,7 @@ RUN corepack enable
 WORKDIR /app
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml .
 COPY ./src/lib ./src/lib
-COPY ./src/auth ./src/auth
+COPY ./src/authenticator ./src/authenticator
 
 FROM base AS prod-deps
 WORKDIR /app
@@ -15,4 +15,4 @@ FROM base
 WORKDIR /app
 COPY --from=prod-deps /app/node_modules ./node_modules
 EXPOSE 3000
-CMD ["pnpm", "start-auth"]
+CMD ["pnpm", "start-authenticator"]
