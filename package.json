@@ -1,9 +1,12 @@
 {
   "name": "lgtm",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start-api": "node src/api/index.js",
+    "start-auth": "node src/auth/index.js",
+    "start-load-generator": "node src/load-generator/index.js",
     "watch-api": "nodemon src/api/index.js",
     "watch-auth": "nodemon src/auth/index.js",
     "watch-load-generator": "nodemon src/load-generator/index.js"
