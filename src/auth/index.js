@@ -34,4 +34,4 @@ app.post('/authenticate', (req, res) => {
   _.delay(() => res.status(status).send(PL.value()), _.random(100, 500))
 })
 
-app.listen(_.get(process, 'env.API_PORT', 3000))
+app.listen(_.get(process, 'env.LGTM_PORT', 3000))

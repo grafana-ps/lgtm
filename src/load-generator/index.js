@@ -51,17 +51,21 @@ async function requestApi() {
     ),
   )
 
-  const response = await fetch(
-    `http://localhost:3000/v13/${album}`,
-    {
-      headers,
-      method,
-    }
-  )
+  try {
+    const response = await fetch(
+      `${LGTM_API}/v13/${album}`,
+      {
+        headers,
+        method,
+      }
+    )
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 setInterval(() => {
   _.delay(requestApi, _.random(0, 1000))
 }, 250)
 
-app.listen(_.get(process, 'env.LOAD_GENERATOR_PORT', 3000))
+app.listen(_.get(process, 'env.LGTM_PORT', 3000))

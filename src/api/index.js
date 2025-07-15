@@ -23,11 +23,15 @@ setupTracing('api')
 
 app.use(getMiddlewareMetrics('api'))
 
+app.get('/', (req, res) => {
+  res.status(200).send(PL.value())
+})
+
 app.use(basicAuth({
   authorizer: async (username, password, cb) => {
     try {
       const response = await fetch(
-        `http://${LGTM_AUTH}/authenticate`,
+        `${LGTM_AUTH}/authenticate`,
         {
           method: 'POST',
           headers: {
@@ -71,4 +75,4 @@ app.all('/v13/:album', (req, res) => {
   }
 })
 
-app.listen(_.get(process, 'env.API_PORT', 3000))
+app.listen(_.get(process, 'env.LGTM_PORT', 3000))
