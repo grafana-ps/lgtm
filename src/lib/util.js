@@ -19,9 +19,9 @@ import {
 } from '@opentelemetry/auto-instrumentations-node'
 import promBundle from 'express-prom-bundle'
 
-export async function setupTracing(serviceName) {
+export async function setupTracing(serviceName, url = process.env.OTLP_URL) {
   const traceExporter = new OTLPTraceExporter({
-    url: 'http://34.28.15.252:4318/v1/traces',
+    url,
   })
 
   const sdk = new NodeSDK({
