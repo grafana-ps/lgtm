@@ -1,21 +1,32 @@
 import _ from 'lodash'
-import express from 'express'
 import ts from 'taylor-swift'
 import {
+  getMorganMiddleware,
   getMiddlewareMetrics,
-  setupTracing,
+  setupTelemetry,
 } from '../lib/util.js'
+
+// OTLP auto instrumentation must happen before module imports
+const {
+  logger,
+} = await setupTelemetry('auth')
+
+// Use dynamic import to allow OTLP auto instrumentation monkey patching
+const expressModule = await import('express')
+const express = expressModule.default
 
 const PL = _({
   service: 'auth',
 })
 
-const STATUS_SAMPLE = _.fill(new Array(20), 200).concat([500, 502, 503, 504])
+const STATUS_SAMPLE = _.fill(
+  new Array(20),
+  200,
+).concat([500, 502, 503, 504])
 
 const app = express()
 
-setupTracing('auth')
-
+app.use(getMorganMiddleware(logger))
 app.use(express.json())
 app.use(getMiddlewareMetrics('auth'))
 
@@ -34,4 +45,5 @@ app.post('/authenticate', (req, res) => {
   _.delay(() => res.status(status).send(PL.value()), _.random(100, 500))
 })
 
-app.listen(_.get(process, 'env.LGTM_PORT', 3000))
+const port = _.get(process, 'env.LGTM_PORT', 3000)
+app.listen(port)
