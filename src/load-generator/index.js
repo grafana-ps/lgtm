@@ -1,11 +1,22 @@
 import _ from 'lodash'
-import express from 'express'
 import { faker } from '@faker-js/faker'
 import ts from 'taylor-swift'
+
 import {
+  startSpan,
   getMiddlewareMetrics,
-  setupTracing,
+  getMorganMiddleware,
+  setupTelemetry,
 } from '../lib/util.js'
+
+// OTLP auto instrumentation must happen before module imports
+const {
+  logger,
+} = await setupTelemetry('load-generator')
+
+// Use dynamic import to allow OTLP auto instrumentation monkey patching
+const expressModule = await import('express')
+const express = expressModule.default
 
 const LGTM_API = _.get(process, 'env.LGTM_API')
 
@@ -18,8 +29,8 @@ const USERNAMES = ['meredith', 'olivia', 'benjamin']
 
 const app = express()
 
-setupTracing('load-generator')
-
+app.use(getMorganMiddleware(logger))
+app.use(express.json())
 app.use(getMiddlewareMetrics('load-generator'))
 
 app.get('/', (req, res) => {
@@ -51,17 +62,23 @@ async function requestApi() {
     ),
   )
 
-  try {
-    const response = await fetch(
-      `${LGTM_API}/v13/${album}`,
-      {
-        headers,
-        method,
-      }
-    )
-  } catch (e) {
-    console.error(e)
-  }
+  const span = startSpan('API request', async () => {
+    try {
+      logger.http(`requesting ${LGTM_API}/v13/${album} with ${method}`)
+
+      const response = await fetch(
+        `${LGTM_API}/v13/${album}`,
+        {
+          headers,
+          method,
+        }
+      )
+
+      logger.http('request complete')
+    } catch (e) {
+      logger.error(`request failed: ${e.message}`)
+    }
+  })
 }
 
 setInterval(() => {

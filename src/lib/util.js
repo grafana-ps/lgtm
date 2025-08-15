@@ -29,6 +29,8 @@ import {
 import promBundle from 'express-prom-bundle'
 import morgan from 'morgan'
 
+let service = ''
+
 export async function setupTelemetry(
   serviceName,
   url = process.env.OTLP_URL,
@@ -37,6 +39,8 @@ export async function setupTelemetry(
   if (shouldDebug) {
     diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG)
   }
+
+  service = serviceName
 
   const traceExporter = new OTLPTraceExporter({
     url,
@@ -54,7 +58,6 @@ export async function setupTelemetry(
         enabled: true,
         disableLogSending: false,
         logHook: (span, record) => {
-          console.log(span, record)
           record['resource.service.name'] = provider.resource.attributes['service.name']
         }
       }),
@@ -69,6 +72,15 @@ export async function setupTelemetry(
     logger,
     provider,
   }
+}
+
+export function startSpan(
+  spanName,
+  fn,
+  serviceName = service,
+) {
+  const tracer = trace.getTracer(serviceName)
+  return tracer.startActiveSpan(spanName, fn)
 }
 
 export async function getLogger() {

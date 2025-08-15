@@ -1,11 +1,21 @@
 import _ from 'lodash'
-import express from 'express'
 import basicAuth from 'express-basic-auth'
 import ts from 'taylor-swift'
+
 import {
   getMiddlewareMetrics,
-  setupTracing,
+  getMorganMiddleware,
+  setupTelemetry,
 } from '../lib/util.js'
+
+// OTLP auto instrumentation must happen before module imports
+const {
+  logger,
+} = await setupTelemetry('api')
+
+// Use dynamic import to allow OTLP auto instrumentation monkey patching
+const expressModule = await import('express')
+const express = expressModule.default
 
 const PL = _({
   service: 'api',
@@ -19,8 +29,8 @@ if (!LGTM_AUTH) {
 
 const app = express()
 
-setupTracing('api')
-
+app.use(getMorganMiddleware(logger))
+app.use(express.json())
 app.use(getMiddlewareMetrics('api'))
 
 app.get('/', (req, res) => {

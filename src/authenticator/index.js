@@ -1,8 +1,9 @@
 import _ from 'lodash'
 import ts from 'taylor-swift'
+
 import {
-  getMorganMiddleware,
   getMiddlewareMetrics,
+  getMorganMiddleware,
   setupTelemetry,
 } from '../lib/util.js'
 
